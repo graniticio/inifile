@@ -1,4 +1,4 @@
-# inifile
+# inifile (v1.1.0)
 A Go library for reading and parsing INI files.
 
 Package inifile provides a Go struct that can parse an INI-style file and make the configuration in that file
