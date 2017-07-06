@@ -399,6 +399,30 @@ func TestSimpleParse(t *testing.T) {
 
 }
 
+func TestSectionView(t *testing.T) {
+
+	path := typesPath()
+
+	ic, err := NewIniConfigFromPath(path)
+
+	if err != nil {
+		t.Fatalf("Problem loading test file %s", err.Error())
+	}
+
+	if s, err := ic.Section("uint"); err != nil {
+		t.Errorf("Unexpected error %s", err.Error())
+	} else {
+
+		if v, _ := s.Value("positive"); v != "4" {
+			t.Errorf("Unexpected value %s", v)
+		}
+
+	}
+
+	if s, _ := ic.Section("xxx"); s != nil {
+		t.Errorf("Expected nil section")
+	}
+}
 
 func TestFloat64Handling(t *testing.T) {
 

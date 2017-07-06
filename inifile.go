@@ -50,6 +50,22 @@ Accessing properties in the global section
 Use the constant inifile.GLOBAL_SECTION as the sectionName when calling any of the above functions to work with properties that are not
 attached to a named section
 
+Accessing properties via an IniSection
+
+If your code needs multiple property values from the same section:
+
+	a, err := ic.Value("section1", "a")
+	b, err := ic.Value("section1", "b")
+	c, err := ic.Value("section1", "c")
+
+it is recommended that you use an IniSection object, which offers the same functions as IniConfig but is bound to a single section:
+
+	is, err := ic.Section("section1")
+	a, err := is.Value("a")
+	b, err := is.Value("b")
+	c, err := is.Value("c")
+
+
 Adding new properties
 
 Properties can be added to an IniConfig at runtime by calling:
@@ -385,6 +401,23 @@ type IniConfig struct {
 func (ic *IniConfig) SectionExists(sectionName string) bool {
 
 	return ic.findSection(sectionName) != nil
+}
+
+//Section returns a view on the IniConfig with the same methods but constrained to a single section
+func (ic *IniConfig) Section(sectionName string) (*IniSection, error) {
+
+	if ic.SectionExists(sectionName) {
+		is := new(IniSection)
+		is.name = sectionName
+		is.ic = ic
+
+		return is, nil
+	} else {
+
+		return nil, errorf("Section %s does not exist", sectionName)
+
+	}
+
 }
 
 //PropertyExists returns true if the section exists and it contains a property with the requested name

@@ -46,11 +46,28 @@ To check that a section of property exists before you call one of these function
 	SectionExists(sectionName string)
 	PropertyExists(sectionName, propertyName string)
 
+### Accessing properties via an IniSection
+
+If your code needs multiple property values from the same section:
+
+	a, err := ic.Value("section1", "a")
+	b, err := ic.Value("section1", "b")
+	c, err := ic.Value("section1", "c")
+
+it is recommended that you use an IniSection object, which offers the same functions as IniConfig but is bound to a single section:
+
+	is, err := ic.Section("section1")
+	a, err := is.Value("a")
+	b, err := is.Value("b")
+	c, err := is.Value("c")
+
 
 ## Accessing properties in the global section
 
 Use the constant <code>inifile.GLOBAL_SECTION</code> as the sectionName when calling any of the above functions to work with properties that are not
 attached to a named section
+
+
 
 ## Adding new properties
 
