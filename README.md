@@ -5,7 +5,7 @@ Package inifile provides a Go struct that can parse an INI-style file and make t
 available via a series of type-safe data accessors. Parsing and data-access behaviour can be configured to support most
 INI file variants.
 
-##Parsing
+## Parsing
 
 To parse an INI file and obtain an instance of IniConfig to access your configuration, call one of:
 	
@@ -25,7 +25,7 @@ For example:
 	}
 
 
-##Accessing properties
+## Accessing properties
 
 The key/value items in an INI file are referred to as properties. Each property is part of a section (properties in an INI file
 defined before any [section] delimiters are considered to be part of the 'global' section). Values are stored as strings.
@@ -47,19 +47,19 @@ To check that a section of property exists before you call one of these function
 	PropertyExists(sectionName, propertyName string)
 
 
-##Accessing properties in the global section
+## Accessing properties in the global section
 
 Use the constant <code>inifile.GLOBAL_SECTION</code> as the sectionName when calling any of the above functions to work with properties that are not
 attached to a named section
 
-##Adding new properties
+## Adding new properties
 
 Properties can be added to an IniConfig at runtime by calling:
 	
 	Add(section, propertyName string, value string)
 
 
-##Customising parsing and configuration access
+## Customising parsing and configuration access
 
 As INI files are not governed by an agreed standard, there are a number of variations in the structure and features
 found in real-world INI files. To accommodate these variations, you can modify the IniOptions used when creating
@@ -75,7 +75,7 @@ and then only modify those you need to change (see the documentation for Default
 
 will parse a file using <code>#</code> instead of <code>;</code> to identify comment lines.
 
-###Case-sensitivity for section and property names
+### Case-sensitivity for section and property names
 
 By default look-ups of sections and properties are case sensitive - <code>Value("mysection", "myproperty")</code> would not match a property called myProperty in a section called [MYPROPERTY].
 
@@ -84,14 +84,14 @@ This is not the behaviour of many Windows implementations of INI file libraries,
 	CaseSensitive = false
 in your IniOptions.
 
-###Comment lines
+### Comment lines
 
 Most INI files use the semi-colon symbol at the start of a line to indicate that the line is a comment. There are notable exceptions, including MySQL INI files, that use a different character, often #. To support this set:
 	
 	CommentStart = "#"
 in your IniOptions.
 
-####Property names and values with spaces
+#### Property names and values with spaces
 
 For readability, some INI files align property names and values like:
 	
@@ -103,14 +103,14 @@ By default the whitespace either side of the property name and value is discarde
 	TrimProperties = false
 in your IniOptions.
 
-###Blank lines
+### Blank lines
 
 For readability, most INI files use blank lines to break up sections and properties. To disallow this and return an error if blank lines are encountered set:
 	
 	TolerateBlankLines = false
 in your IniOptions.
 
-###Allow properties outside of a section
+### Allow properties outside of a section
 
 Some INI files have properties defined before the first [Section]. These properties are considered to be in the 'global' section and by default this behaviour is supported. To forbid
 properties in the global section, set:
@@ -120,7 +120,7 @@ in your IniOptions.
 
 Use the <code>inifile.GLOBAL_SECTION</code> constant as the section name to access properties in the global section.
 
-###Unset properties
+### Unset properties
 
 Some INI files allow a property to be defined without a value like
 	
@@ -138,7 +138,7 @@ To reverse this behaviour and have any unset properties stored with <code>""</co
 	DiscardPropertiesWithNoValue = false
 in your IniOptions.
 
-###Boolean values
+### Boolean values
 
 Go's <code>strconv.ParseBool</code> function is extremely permissive about the values it considers to represent true or false (see https://golang.org/pkg/strconv/#ParseBool) and by default
 calling
@@ -164,7 +164,7 @@ To support case-insensitve matching of the values in StrictBoolTrue and StrictBo
 	StrictBoolCaseSensitive = false
 
 
-###Unparseable lines
+### Unparseable lines
 
 By default, an INI file will not parse correctly if a line is encountered in the file that cannot be interpreted as a
 section, comment, property or a blank line. To ignore unparseable lines, set:
@@ -173,7 +173,7 @@ section, comment, property or a blank line. To ignore unparseable lines, set:
 in your IniOptions.
 
 
-###Inline comments
+### Inline comments
 
 Some INI files allow a comment on the same line as a property or section:
 	
@@ -206,7 +206,7 @@ The value returned by
     
 would be "Service is too busy;load is high"
 
-###Quoted values
+### Quoted values
 
 Some INI files surround their values with quotes like:
 	
