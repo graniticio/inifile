@@ -44,6 +44,13 @@ To check that a section of property exists before you call one of these function
 	SectionExists(sectionName string)
 	PropertyExists(sectionName, propertyName string)
 
+Methods exist to return the zero value for a type instead of an error if the section/property didn't exist or if there
+was a problem converting the value to the requested type:
+	ValueOrZero(sectionName, propertyName string)
+	ValueOrZeroAsFloat64(sectionName, propertyName string)
+	ValueOrZeroAsInt64(sectionName, propertyName string)
+	ValueOrZeroAsUint64(sectionName, propertyName string)
+	ValueOrZeroAsBool(sectionName, propertyName string)
 
 Accessing properties in the global section
 
@@ -452,6 +459,18 @@ func (ic *IniConfig) Value(sectionName, propertyName string) (string, error) {
 
 }
 
+// ValueOrDefault returns the value of the specified property in the specified section or the string zero value
+// (empty string) if the value could not be found
+func (ic *IniConfig) ValueOrZero(sectionName, propertyName string) (string) {
+
+	if v, err := ic.Value(sectionName, propertyName); err == nil {
+		return v
+	} else {
+		return ""
+	}
+
+}
+
 // ValueAsFloat64 attempts to convert the specified property to a float64.
 //
 // Returns an error if the section or property does not exist or if the value could not be converted to a float64
@@ -478,7 +497,20 @@ func (ic *IniConfig) ValueAsFloat64(sectionName, propertyName string) (float64, 
 
 }
 
-// ValueAsFloat64 attempts to convert the specified property to an int64.
+// ValueOrZeroAsFloat64 returns the value of the specified property in the specified section as a float64 or
+// the float64 zero value (0) if the value could not be found
+func (ic *IniConfig) ValueOrZeroAsFloat64(sectionName, propertyName string) (float64) {
+
+	if v, err := ic.ValueAsFloat64(sectionName, propertyName); err == nil {
+		return v
+	} else {
+		return 0
+	}
+
+}
+
+
+// ValueAsInt64 attempts to convert the specified property to an int64.
 //
 // Returns an error if the section or property does not exist or if the value could not be converted to an int64
 func (ic *IniConfig) ValueAsInt64(sectionName, propertyName string) (int64, error) {
@@ -500,6 +532,18 @@ func (ic *IniConfig) ValueAsInt64(sectionName, propertyName string) (int64, erro
 
 		return 0, errorf("Unable to interpret [%s].%s (%s) as an int64.", origSectionName, origPropName, sv)
 
+	}
+
+}
+
+// ValueOrZeroAsInt64 returns the value of the specified property in the specified section as an int64 or
+// the int64 zero value (0) if the value could not be found
+func (ic *IniConfig) ValueOrZeroAsInt64(sectionName, propertyName string) (int64) {
+
+	if v, err := ic.ValueAsInt64(sectionName, propertyName); err == nil {
+		return v
+	} else {
+		return 0
 	}
 
 }
@@ -526,6 +570,18 @@ func (ic *IniConfig) ValueAsUint64(sectionName, propertyName string) (uint64, er
 
 		return 0, errorf("Unable to interpret [%s].%s (%s) as a uint64.", origSectionName, origPropName, sv)
 
+	}
+
+}
+
+// ValueOrZeroAsUint64 returns the value of the specified property in the specified section as a uint64 or
+// the uint64 zero value (0) if the value could not be found
+func (ic *IniConfig) ValueOrZeroAsUint64(sectionName, propertyName string) (uint64) {
+
+	if v, err := ic.ValueAsUint64(sectionName, propertyName); err == nil {
+		return v
+	} else {
+		return 0
 	}
 
 }
@@ -586,6 +642,18 @@ func (ic *IniConfig) ValueAsBool(sectionName, propertyName string) (bool, error)
 
 
 	return false, nil
+}
+
+// ValueOrZeroAsBool returns the value of the specified property in the specified section as a bool or
+// the bool zero value (false) if the value could not be found
+func (ic *IniConfig) ValueOrZeroAsBool(sectionName, propertyName string) (bool) {
+
+	if v, err := ic.ValueAsBool(sectionName, propertyName); err == nil {
+		return v
+	} else {
+		return false
+	}
+
 }
 
 // Add stores a property in the named section. If the property already exists, its value is overwritten.

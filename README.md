@@ -1,4 +1,4 @@
-# inifile (v1.1.0)
+# inifile (v1.2.0)
 A Go library for reading and parsing INI files.
 
 Package inifile provides a Go struct that can parse an INI-style file and make the configuration in that file
@@ -45,6 +45,16 @@ To check that a section of property exists before you call one of these function
 	
 	SectionExists(sectionName string)
 	PropertyExists(sectionName, propertyName string)
+	
+Methods exist to return the zero value for a type instead of an error if the section/property didn't exist or if there 
+was a problem converting the value to the requested type:
+	
+	ValueOrZero(sectionName, propertyName string)
+	ValueOrZeroAsFloat64(sectionName, propertyName string)
+	ValueOrZeroAsInt64(sectionName, propertyName string)
+	ValueOrZeroAsUint64(sectionName, propertyName string)
+	ValueOrZeroAsBool(sectionName, propertyName string)
+
 
 ### Accessing properties via an IniSection
 
