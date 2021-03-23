@@ -249,3 +249,11 @@ The runes (characters) that will be recognised as enclosing quotes are defined i
 	
 	EnclosingQuoteSymbols
 and default to the single (') and double (") quote symbols.
+
+### Assignment with Colon
+
+Some INI files use the colon for assignment rather than the equals sign. To 
+support this set:
+
+    UseColonAssignment = true
+in your IniOptions.
