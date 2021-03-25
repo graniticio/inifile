@@ -255,6 +255,7 @@ const GLOBAL_SECTION = ""
 //		CommentEscapePrefix				"\"
 //		StripEnclosingQuotes			false
 //		EnclosingQuoteSymbols			[]rune{'\'','"'}
+//      UseColonAssignment              false
 //
 func DefaultIniOptions() *IniOptions {
 	io := new(IniOptions)
@@ -272,6 +273,7 @@ func DefaultIniOptions() *IniOptions {
 	io.CommentEscapePrefix = "\\"
 	io.StripEnclosingQuotes = false
 	io.EnclosingQuoteSymbols = []rune{'\'','"'}
+    io.UseColonAssignment = false
 
 	return io
 }
@@ -328,6 +330,8 @@ type IniOptions struct {
 	//The symbols that are used as enclosing quotes
 	EnclosingQuoteSymbols []rune
 
+    //Assignment uses colon not equals
+    UseColonAssignment bool
 }
 
 // NewIniConfigFromPath loads the INI file at the supplied path into a new IniConfig object.
@@ -393,6 +397,7 @@ func NewIniConfigFromFileWithOptions(file *os.File, options *IniOptions) (*IniCo
 
 const rx_section = "\\[(.*)\\]"
 const rx_property = "([^=]*)=(.*)"
+const rx_colon_property = "([^=]*):(.*)"
 
 // IniConfig provides access to configuration loaded in from an INI file. Functions exist to
 // check whether a section or property exists; to recover the raw string value of a property or
@@ -678,10 +683,15 @@ func (ic *IniConfig) parse(cf *os.File) error {
 	s := bufio.NewScanner(cf)
 	section := GLOBAL_SECTION
 
-	sectionRx := regexp.MustCompile(rx_section)
-	propRx := regexp.MustCompile(rx_property)
-
 	options := ic.options
+
+    var propRx *regexp.Regexp
+	sectionRx := regexp.MustCompile(rx_section)
+    if options.UseColonAssignment == true {
+	    propRx = regexp.MustCompile(rx_colon_property)
+    } else {
+	    propRx = regexp.MustCompile(rx_property)
+    }
 
 	lineNumber := 0
 

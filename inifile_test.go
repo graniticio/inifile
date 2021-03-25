@@ -1,17 +1,17 @@
 package inifile
 
 import (
-	"path/filepath"
-	"testing"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
+	"testing"
 )
 
 const testfiles_base = "testfiles"
 const simple_file = "simple.ini"
 const types_file = "types.ini"
-
+const colon_file = "colons.ini"
 
 func simplePath() string {
 	return filepath.Join(testfiles_base, simple_file)
@@ -19,6 +19,10 @@ func simplePath() string {
 
 func typesPath() string {
 	return filepath.Join(testfiles_base, types_file)
+}
+
+func colonPath() string {
+	return filepath.Join(testfiles_base, colon_file)
 }
 
 func TestNewFunctions(t *testing.T) {
@@ -571,6 +575,23 @@ func TestBooleanHandling(t *testing.T) {
 
 }
 
+func TestColonParse(t *testing.T) {
+	path := colonPath()
+	options := DefaultIniOptions()
+	options.UseColonAssignment = true
+
+	ic, err := NewIniConfigFromPathWithOptions(path, options)
+	if err != nil {
+		t.Errorf("Unexpected Error: %s", err)
+	}
+	val, err := ic.Value("Section1", "name1")
+	if err != nil {
+		t.Errorf("Can't find expected string '%s': error: %s", "value1", err)
+	}
+	if val != "value1" {
+		t.Errorf("Got %s, expected %s", val, "value1")
+	}
+}
 
 func expectBool(t *testing.T, ic *IniConfig, sectionName, propertyName string, expected bool) {
 
